@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>El mar y la escalera · Lonelas</title>
+  <meta name="description" content="Bitácoras del Brejo Paraibano. Exposición de Lonelas (Lohanna Oliveira) en Santiago de Cuba, 2026.">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="#inicio" data-t="titulo">El mar y la escalera</a>
+    <nav class="menu" aria-label="Secciones">
+      <a href="#mar" data-t="mar.nav">El mar</a>
+      <a href="#bitacora" data-t="nav.bitacora">Bitácora</a>
+      <a href="#esquecimento" data-t="nav.esquecimento">Ejercicios de olvido</a>
+      <a href="#exposicao" data-t="nav.exposicao">Exposición</a>
+    </nav>
+    <button class="idioma" type="button" data-t="trocarIdioma">Português</button>
+  </header>
+
+  <main id="conteudo" tabindex="-1"></main>
+
+  <footer class="rodape"><p data-t="rodape"></p></footer>
+
+  <div class="lupa" hidden>
+    <button class="lupa-fechar" type="button" aria-label="Cerrar">×</button>
+    <img alt="">
+    <p class="lupa-legenda"></p>
+  </div>
+
+  <script src="js/dados.js"></script>
+  <script src="js/rituais.js"></script>
+  <script src="js/exercicios.js"></script>
+  <script src="js/calculadora.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Offline: só no site publicado (https). No servidor local, sempre a versão do disco.
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      navigator.serviceWorker.register('sw.js').catch(function () { /* segue sem offline */ });
+    }
+  </script>
+</body>
+</html>

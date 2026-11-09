@@ -74,7 +74,7 @@ a:hover .seta, a:focus-visible .seta, button:hover .seta { transform: translateX
 .pilula:hover { background: var(--tinta); color: var(--papel); }
 
 .ficha { margin: 0; display: grid; }
-.ficha > div { display: grid; grid-template-columns: calc(87 * var(--u)) 1fr; gap: 0; padding: calc(4 * var(--u)) 0; }
+.ficha > div { display: grid; grid-template-columns: calc(87 * var(--u)) 1fr; gap: 0 10px; padding: calc(4 * var(--u)) 0; }
 .ficha dt { font: 600 calc(8.5 * var(--u))/calc(14 * var(--u)) var(--sans); letter-spacing: .16em; text-transform: uppercase; }
 .ficha dd { margin: 0; font: 400 calc(10.5 * var(--u))/calc(14 * var(--u)) var(--sans); letter-spacing: .03em; }
 .ficha dd::first-letter { text-transform: uppercase; }
@@ -665,6 +665,9 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 .sobre-bloco .texto-longo { margin: 14px 0 10px; }
 .sobre-bloco .botao, .sobre-bloco .link-seta { justify-self: start; margin-top: 12px; }
 .sobre-bloco .ficha { margin-top: 12px; }
+.sobre-bloco .ficha dt { overflow-wrap: anywhere; hyphens: auto; }
+.sobre-bloco .ficha > div { grid-template-columns: minmax(0, 1fr); row-gap: 4px; padding: 9px 0; }
+@media (min-width: 900px) { .sobre-bloco .ficha > div { grid-template-columns: 260px minmax(0, 1fr); column-gap: 24px; padding: 6px 0; } }
 /* foto da artista: papel rasgado nos quatro lados, levemente torto, com sombra que segue o contorno */
 .sobre-foto { margin: 18px 0 6px; width: min(78%, 300px); transform: rotate(var(--gira, 0deg)); filter: drop-shadow(0 3px 5px rgba(29, 27, 25, .28)); }
 .sobre-foto-papel { background: #f6f5f1; padding: 7px; }

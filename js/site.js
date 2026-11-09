@@ -780,16 +780,37 @@
         if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || /^(INPUT|TEXTAREA|SELECT)$/.test((e.target || {}).tagName || '')) return;
         if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); vai(atual + (e.key === 'ArrowRight' ? 1 : -1)); }
       });
-      // roda do mouse (vertical) no computador: passa um retalho por vez; nas pontas, a página rola normalmente
-      let travaRoda = 0;
-      ao(rolo, 'wheel', (e) => {
+      // roda do mouse (vertical) no computador: passa um retalho por vez, com o cursor em qualquer ponto da página
+      // desde que a faixa esteja inteira na tela (antes disso a roda só desce até ela); nas pontas, a página rola normalmente
+      // a faixa anda com uma animação própria (posição guardada numa variável, sem ler o layout por quadro);
+      // giros seguidos somam: o próximo passo parte do retalho de destino, não de onde a faixa está no meio do caminho
+      let travaRoda = 0, rodaAlvo = -1, rodaX = 0, rodaFim = 0, rodaPedido = 0;
+      const centro = (j) => Math.max(0, Math.min(sw - rw, est[j].esq + est[j].larg / 2 - rw / 2));
+      const rodaAnda = () => {
+        const d = rodaFim - rodaX;
+        if (Math.abs(d) < 0.8) { rolo.scrollLeft = rodaFim; rolo.classList.remove('rodando'); rodaAlvo = -1; rodaPedido = 0; return; }
+        rodaX += d * 0.16; rolo.scrollLeft = rodaX; rodaPedido = requestAnimationFrame(rodaAnda);
+      };
+      limpezas.push(() => cancelAnimationFrame(rodaPedido));
+      ao(window, 'wheel', (e) => {
         if (e.ctrlKey || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // trackpad na horizontal: nativo
-        const dir = Math.sign(e.deltaY);
-        if ((dir < 0 && antB.disabled) || (dir > 0 && proxB.disabled)) return;
+        if (document.body.classList.contains('menu-aberto')) return;
+        if (!rolo.contains(e.target)) {
+          const q = cena.getBoundingClientRect();
+          if (q.top < -2 || q.bottom > innerHeight + 2) return;
+        }
+        const dir = Math.sign(e.deltaY), base = rodaAlvo >= 0 ? rodaAlvo : atual;
+        const j = Math.max(0, Math.min(est.length - 1, base + dir));
+        if (j === base || Math.abs(centro(j) - centro(base)) < 2) { if (rodaAlvo < 0) return; e.preventDefault(); return; } // na ponta: a página rola
         e.preventDefault();
         const agora = performance.now(); if (agora < travaRoda) return;
-        travaRoda = agora + 260; vai(atual + dir);
+        travaRoda = agora + 140; rodaAlvo = j; rodaFim = centro(j);
+        if (reduz()) { rolo.scrollLeft = rodaFim; rodaAlvo = -1; return; }
+        if (!rodaPedido) { rodaX = rolo.scrollLeft; rolo.classList.add('rodando'); rodaPedido = requestAnimationFrame(rodaAnda); }
       }, { passive: false });
+      // se a pessoa arrasta ou usa as setas no meio da animação, a roda solta a faixa
+      const soltaRoda = () => { if (rodaPedido) { cancelAnimationFrame(rodaPedido); rodaPedido = 0; rodaAlvo = -1; rolo.classList.remove('rodando'); } };
+      ao(rolo, 'pointerdown', soltaRoda); [antB, proxB, ...quadrados].forEach((q) => ao(q, 'click', soltaRoda, true));
       // arrastar com o mouse (no dedo o navegador já rola sozinho)
       let arrasto = null, arrastou = false;
       ao(rolo, 'pointerdown', (e) => {

@@ -395,6 +395,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 /* no celular a faixa sobe e fica um pouco mais baixa: no iPhone ficava colada na barra de navegação do Safari */
 @media (max-width: 899px) { .cena { --alto: clamp(300px, 56svh, 600px); margin-top: 10px; } }
 .cena-rolo::-webkit-scrollbar { display: none; }
+.cena-rolo.rodando { scroll-snap-type: none; }
 .cena-rolo.arrastando { scroll-snap-type: none; cursor: grabbing; user-select: none; -webkit-user-select: none; }
 @media (hover: hover) and (pointer: fine) { .cena-rolo { cursor: grab; } }
 .cena-trilho { --pX: calc(var(--alto) * .125); --pad: max(16px, calc(50cqi - var(--alto) * .12)); position: relative; height: 100%; width: calc(2 * var(--pad) + 15.4 * var(--pX) + var(--alto) * .28); overflow-x: clip; }

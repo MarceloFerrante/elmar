@@ -668,7 +668,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 /* foto da artista: papel rasgado nos quatro lados, levemente torto, com sombra que segue o contorno */
 .sobre-foto { margin: 18px 0 6px; width: min(78%, 300px); transform: rotate(var(--gira, 0deg)); filter: drop-shadow(0 3px 5px rgba(29, 27, 25, .28)); }
 .sobre-foto-papel { background: #f6f5f1; padding: 7px; }
-.sobre-foto img { display: block; width: 100%; height: auto; filter: grayscale(1) contrast(1.02); }
+.sobre-foto img { display: block; width: 100%; height: auto; }
 .sobre-bloco .sobre-sub { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--linha); }
 
 

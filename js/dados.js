@@ -400,7 +400,7 @@ const SOBRE = {
   site: 'https://lonelas.com', // site principal da artista (confirmado)
   artista: {
     nome: 'Lohanna Lonelas',
-    fotoAlt: { pt: 'Lohanna Lonelas, de vestido preto e chapéu, sentada numa cadeira diante das obras penduradas na parede', es: 'Lohanna Lonelas, con vestido negro y sombrero, sentada en una silla frente a las obras colgadas en la pared', en: 'Lohanna Lonelas, in a black dress and hat, sitting on a chair in front of the works hanging on the wall' },
+    fotoAlt: { pt: 'Retrato em preto e branco de Lohanna Lonelas, de chapéu e blusa pretos, diante de peças de tecido penduradas na parede', es: 'Retrato en blanco y negro de Lohanna Lonelas, con sombrero y blusa negros, frente a piezas de tela colgadas en la pared', en: 'Black-and-white portrait of Lohanna Lonelas, in a black hat and top, in front of fabric pieces hanging on the wall' },
     papel: { pt: 'artista visual, arte-educadora e pesquisadora', es: 'artista visual, arte-educadora e investigadora', en: 'visual artist, art educator and researcher' },
     // bio enviada por Lohanna em 07/11/2026 (pt original; es e en traduzidos)
     bio: {
@@ -417,6 +417,7 @@ const SOBRE = {
   curador: {
     nome: 'Maycon Albuquerque',
     instagram: 'https://www.instagram.com/myycnn',
+    fotoAlt: { pt: 'Retrato em preto e branco de Maycon Albuquerque, sorrindo, de camisa listrada, diante de quadros na parede', es: 'Retrato en blanco y negro de Maycon Albuquerque, sonriendo, con camisa a rayas, frente a cuadros en la pared', en: 'Black-and-white portrait of Maycon Albuquerque, smiling, in a striped shirt, in front of framed works on the wall' },
     papel: { pt: 'artista visual e curador', es: 'artista visual y curador', en: 'visual artist and curator' },
     // mini bio enviada por Lohanna em 07/11/2026 (pt original; es e en traduzidos)
     bio: {

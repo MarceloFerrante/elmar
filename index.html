@@ -1,44 +1,49 @@
 <!doctype html>
-<html lang="es">
+<!-- El mar y la escalera · Bitácoras del Brejo Paraibano · Lohanna Lonelas.
+     Site estático: abre direto do disco (file://), sem build. Rotas por #. -->
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>El mar y la escalera · Lonelas</title>
-  <meta name="description" content="Bitácoras del Brejo Paraibano. Exposición de Lonelas (Lohanna Oliveira) en Santiago de Cuba, 2026.">
-  <link rel="stylesheet" href="css/estilo.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El mar y la escalera · Lonelas</title>
+<meta name="description" content="El mar y la escalera — Bitácoras del Brejo Paraibano. Exposição de Lohanna Lonelas: obras, diários de viagem e ciberpoesias do esquecimento.">
+<meta name="theme-color" content="#fbfaf7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="El mar y la escalera">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fbfaf7'/%3E%3Cpath d='M5 27h6v-6h6v-6h6V9h4' fill='none' stroke='%231d1b19' stroke-width='2'/%3E%3Ccircle cx='22' cy='10' r='3' fill='%23c98d2e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/fontes.css?v=dbce08f1">
+<link rel="stylesheet" href="css/site.css?v=5cb907b6">
 </head>
-<body>
-  <header class="topo">
-    <a class="marca" href="#inicio" data-t="titulo">El mar y la escalera</a>
-    <nav class="menu" aria-label="Secciones">
-      <a href="#mar" data-t="mar.nav">El mar</a>
-      <a href="#bitacora" data-t="nav.bitacora">Bitácora</a>
-      <a href="#esquecimento" data-t="nav.esquecimento">Ejercicios de olvido</a>
-      <a href="#exposicao" data-t="nav.exposicao">Exposición</a>
-    </nav>
-    <button class="idioma" type="button" data-t="trocarIdioma">Português</button>
-  </header>
+<body data-vista="inicio">
 
-  <main id="conteudo" tabindex="-1"></main>
+<a class="pular" href="#vista">pular para o conteúdo</a>
 
-  <footer class="rodape"><p data-t="rodape"></p></footer>
-
-  <div class="lupa" hidden>
-    <button class="lupa-fechar" type="button" aria-label="Cerrar">×</button>
-    <img alt="">
-    <p class="lupa-legenda"></p>
+<header class="topo">
+  <a class="topo-voltar" href="#/" hidden><span aria-hidden="true">←</span><span class="topo-rotulo"></span></a>
+  <a class="topo-casa" href="#/" hidden aria-label="Página inicial"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9.5 10 3l7 6.5M5 8v9h4v-5h2v5h4V8"/></svg></a>
+  <div class="topo-dir">
+    <div class="linguas" role="group" aria-label="idioma / idioma / language"></div>
+    <button class="cheia" type="button" hidden aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="entra" d="M2.5 7.5v-5h5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/><path class="sai" d="M7.5 2.5v5h-5M17.5 7.5h-5v-5M12.5 17.5v-5h5M2.5 12.5h5v5"/></svg></button>
+    <button class="abre-menu" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </div>
+</header>
 
-  <script src="js/dados.js"></script>
-  <script src="js/rituais.js"></script>
-  <script src="js/exercicios.js"></script>
-  <script src="js/calculadora.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    // Offline: só no site publicado (https). No servidor local, sempre a versão do disco.
-    if ('serviceWorker' in navigator && location.protocol === 'https:') {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* segue sem offline */ });
-    }
-  </script>
+<main id="vista" tabindex="-1"></main>
+
+<nav class="menu" id="menu" hidden>
+  <div class="menu-dentro"></div>
+</nav>
+
+<div class="zoom" hidden>
+  <button class="zoom-volta" type="button"><span aria-hidden="true">←</span></button>
+  <button class="zoom-fecha" type="button"></button>
+  <div class="zoom-area"><img alt=""></div>
+</div>
+
+<script src="js/dados.js?v=450d24a1"></script>
+<script src="js/exercicios.js?v=c9daa303"></script>
+<script src="js/site.js?v=b2759637"></script>
 </body>
 </html>

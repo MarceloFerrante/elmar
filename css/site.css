@@ -474,12 +474,12 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 
 /* ---------- exercício ---------- */
 .exercicio { display: grid; gap: 0; }
-/* faixa do título: imagem sorteada, dessaturada e clareada, borda de baixo rasgada; o título por cima */
+/* faixa do título: imagem sorteada, quase com a cor toda e clareada, borda de baixo rasgada; o título por cima */
 .ex-faixa { display: grid; min-height: 136px; margin: 0 calc(-1 * var(--pr)) 22px calc(-1 * var(--pl)); filter: drop-shadow(0 2px 3px rgba(29, 27, 25, .16)); }
 .ex-faixa > * { grid-area: 1 / 1; }
 .faixa-papel { position: relative; overflow: hidden; background: #fff; transition: opacity 1.6s, filter 1.6s; }
-.faixa-papel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.35) contrast(.82); }
-.faixa-veu { position: absolute; inset: 0; z-index: 1; background: var(--papel); opacity: .56; }
+.faixa-papel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) contrast(.9); }
+.faixa-veu { position: absolute; inset: 0; z-index: 1; background: var(--papel); opacity: .5; }
 .faixa-papel.textura::after { z-index: 2; }
 .faixa-titulo { position: relative; z-index: 3; align-self: end; margin: 0; padding: 28px var(--pr) 26px var(--pl); color: var(--tinta); text-shadow: 0 0 10px rgba(251, 250, 247, .9), 0 0 2px rgba(251, 250, 247, .9); }
 .faixa-titulo .traco { margin-top: 12px; }

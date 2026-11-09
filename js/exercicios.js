@@ -275,7 +275,10 @@ const EXERCICIO_MONTA = (() => {
     let ult = null, total = 0, quieto = 0, desenhou = false;
     const risca = (a, b) => {
       cx.globalCompositeOperation = 'destination-out'; cx.lineCap = 'round'; cx.lineJoin = 'round';
-      cx.strokeStyle = 'rgba(0,0,0,.9)'; cx.lineWidth = 16; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+      // traço mais largo e que abre a névoa por inteiro, com uma auréola mais fraca em volta (a imagem aparece mais)
+      cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y);
+      cx.strokeStyle = 'rgba(0,0,0,.35)'; cx.lineWidth = 36; cx.stroke();
+      cx.strokeStyle = 'rgba(0,0,0,1)'; cx.lineWidth = 22; cx.stroke();
       cx.globalCompositeOperation = 'source-over';
       total += Math.hypot(b.x - a.x, b.y - a.y); quieto = 0; desenhou = true; solta(a, b);
     };
@@ -283,11 +286,13 @@ const EXERCICIO_MONTA = (() => {
     k.ao(cv, 'pointermove', (e) => { if (!ult) return; const p = local(e, cv); risca(ult, p); ult = p; });
     k.ao(cv, 'pointerup', () => (ult = null)); k.ao(cv, 'pointercancel', () => (ult = null));
     k.laco(() => {
-      // a névoa volta: camadas leitosas, com grão
-      cx.fillStyle = 'rgba(246,245,241,0.035)'; cx.fillRect(0, 0, w, h);
-      for (let i = 0; i < 6; i++) { cx.fillStyle = `rgba(255,255,255,${rnd(0.02, 0.06)})`; cx.beginPath(); cx.arc(rnd(0, w), rnd(0, h), rnd(10, 40), 0, 7); cx.fill(); }
+      // a névoa volta: camadas leitosas, com grão; enquanto o dedo anda e por ~1,5 s depois ela quase não volta,
+      // para a imagem ficar à vista um pouco mais antes de se esconder
+      const f = quieto < 90 ? 0.12 : quieto < 150 ? 0.5 : 1;
+      cx.fillStyle = `rgba(246,245,241,${(0.026 * f).toFixed(4)})`; cx.fillRect(0, 0, w, h);
+      for (let i = 0; i < 6; i++) { cx.fillStyle = `rgba(255,255,255,${(rnd(0.02, 0.05) * f).toFixed(4)})`; cx.beginPath(); cx.arc(rnd(0, w), rnd(0, h), rnd(10, 40), 0, 7); cx.fill(); }
       // e se recompõe com grão: pontinhos de névoa caindo aqui e ali
-      for (let i = 0; i < 26; i++) { cx.fillStyle = `rgba(${Math.random() < 0.2 ? '200,198,192' : '246,245,241'},${rnd(0.35, 0.8).toFixed(2)})`; const r = rnd(0.5, 1.4); cx.fillRect(rnd(0, w), rnd(0, h), r, r); }
+      for (let i = 0; i < Math.round(26 * f); i++) { cx.fillStyle = `rgba(${Math.random() < 0.2 ? '200,198,192' : '246,245,241'},${rnd(0.35, 0.8).toFixed(2)})`; const r = rnd(0.5, 1.4); cx.fillRect(rnd(0, w), rnd(0, h), r, r); }
       sopra();
       quieto++;
       if (desenhou && total > 250 && quieto > 200) ctx.feito();

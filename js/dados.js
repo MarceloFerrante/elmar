@@ -184,8 +184,10 @@ const OBRAS = [
     materiais: { pt: 'sublimação sobre tecido, fotografia experimental, corda de sisal e rede decorativa', es: 'sublimación sobre tejido, fotografía experimental, cuerda de sisal y red decorativa', en: 'dye sublimation on fabric, experimental photography, sisal rope and decorative netting' },
     dimensoes: { pt: 'dimensões variáveis', es: 'dimensiones variables', en: 'variable dimensions' },
     fotos: [
-      { img: 'site/escadaria', alt: { pt: 'Tiras de tecido impresso caindo como uma cascata até o chão', es: 'Tiras de tejido impreso que caen como una cascada hasta el suelo', en: 'Strips of printed fabric falling like a waterfall to the floor' } },
-      { img: 'site/tiras', alt: { pt: 'Detalhe das tiras de tecido impresso', es: 'Detalle de las tiras de tejido impreso', en: 'Detail of the printed fabric strips' } },
+      { img: 'site/escadaria-1', alt: { pt: 'Tiras de tecido impresso caem de uma vara de madeira e se espalham pelo chão como uma cascata', es: 'Tiras de tejido impreso caen de una varilla de madera y se esparcen por el suelo como una cascada', en: 'Strips of printed fabric fall from a wooden rod and spread across the floor like a waterfall' } },
+      { img: 'site/escadaria-2', alt: { pt: 'A instalação vista de frente, com as tiras amontoadas no chão de cimento', es: 'La instalación vista de frente, con las tiras amontonadas en el suelo de cemento', en: 'The installation seen from the front, with the strips piled on the concrete floor' } },
+      { img: 'site/escadaria-3', alt: { pt: 'A artista passa, em movimento, diante da cascata de tiras', es: 'La artista pasa, en movimiento, delante de la cascada de tiras', en: 'The artist walks past the cascade of strips, in motion' } },
+      { img: 'site/escadaria-4', alt: { pt: 'Mão segura uma das tiras, com fotografia impressa e escrita à mão', es: 'Una mano sostiene una de las tiras, con fotografía impresa y escritura a mano', en: 'A hand holds one of the strips, with a printed photograph and handwriting' } },
     ],
     texto: {
       es: ['Esta instalación puede recordar una cascada, pero también el flujo del agua que desciende desde las zonas más elevadas del territorio hasta el mar, el mismo movimiento que inspiró mis fotocollages.', 'Durante el viaje, me interesó especialmente imaginar el pasado geológico de esta región, donde todavía se encuentran vestigios de fósiles marinos. Hace millones de años, mucho antes de la presencia humana, este territorio estuvo cubierto por el océano.', 'A partir de esa idea, comencé a transformar fotografías del paisaje actual en alegorías de un fondo marino desaparecido. Las plantas se convierten en algas, las rocas en arrecifes y las imágenes se fragmentan como recuerdos de un tiempo que nunca conocimos.', 'Para mí, esta instalación es una forma de navegar por el fósil de un océano, de recorrer memorias que ya no existen, o que quizás nunca existieron.'],
@@ -201,8 +203,10 @@ const OBRAS = [
     materiais: { pt: 'sublimação sobre tecido, madeira de pinho e corda de sisal', es: 'sublimación sobre tejido, madera de pino y cuerda de sisal', en: 'dye sublimation on fabric, pine wood and sisal rope' },
     dimensoes: { pt: 'dimensões variáveis, adaptáveis ao espaço expositivo', es: 'dimensiones variables, adaptables al espacio expositivo', en: 'variable dimensions, adaptable to the space' },
     fotos: [
-      { img: 'site/fosseis', alt: { pt: 'Tecidos impressos pendurados em hastes de madeira', es: 'Tejidos impresos colgados de varillas de madera', en: 'Printed fabrics hanging from wooden rods' } },
-      { img: 'site/fosseis2', alt: { pt: 'Detalhe dos tecidos com escrita manuscrita', es: 'Detalle de los tejidos con escritura manuscrita', en: 'Detail of the fabrics with handwriting' } },
+      { img: 'site/fosseis-1', alt: { pt: 'Cruzes e círculos de madeira na parede, com feixes de tecido impresso pendurados e ligados por cordas', es: 'Cruces y círculos de madera en la pared, con haces de tejido impreso colgados y unidos por cuerdas', en: 'Wooden crosses and circles on the wall, with bundles of printed fabric hanging and linked by cords' } },
+      { img: 'site/fosseis-2', alt: { pt: 'A artista caminha diante da instalação, em movimento', es: 'La artista camina delante de la instalación, en movimiento', en: 'The artist walks in front of the installation, in motion' } },
+      { img: 'site/fosseis-3', alt: { pt: 'Detalhe de uma espada de madeira com tecidos escritos à mão e cordas de sisal', es: 'Detalle de una espada de madera con tejidos escritos a mano y cuerdas de sisal', en: 'Detail of a wooden sword with handwritten fabrics and sisal cords' } },
+      { img: 'site/fosseis-4', alt: { pt: 'Detalhe de uma cruz de madeira com o feixe de tecidos impressos amarrado', es: 'Detalle de una cruz de madera con el haz de tejidos impresos atado', en: 'Detail of a wooden cross with the bundle of printed fabrics tied to it' } },
     ],
     texto: {
       es: ['Al crear esta instalación, comencé a imaginar las batallas, la colonización, la catequesis y las distintas experiencias humanas que transformaron este territorio a lo largo del tiempo.', 'Me interesó pensar su historia como una especie de colcha de retazos culturales, formada por encuentros, conflictos, rupturas y memorias que se superponen. Las imágenes aparecen fragmentadas, como si fueran restos de un pasado que intentamos reconstruir.', 'La escalinata, además de sugerir la topografía y las formas del paisaje, también me hizo imaginar las historias que pudieron desarrollarse en esta región.', 'Esta obra es, para mí, un ejercicio de imaginación sobre esas huellas. No busco reconstruir los acontecimientos históricos, sino jugar con sus fragmentos, mezclando recuerdos, ficciones y vestigios para inventar otras formas de mirar el pasado.'],
@@ -218,8 +222,9 @@ const OBRAS = [
     materiais: { pt: 'varas de madeira, corda de sisal e papéis impressos', es: 'varillas de madera, cuerda de sisal, papeles impresos', en: 'wooden rods, sisal rope and printed papers' },
     dimensoes: { pt: 'dimensões variáveis, adaptáveis ao espaço expositivo', es: 'dimensiones variables, adaptables al espacio expositivo', en: 'variable dimensions, adaptable to the space' },
     fotos: [
-      { img: 'site/exercicio_parede', alt: { pt: 'Varas de madeira e cordas de sisal desenham montanhas e dois círculos numa parede branca, com papéis impressos presos ao longo das linhas', es: 'Varillas de madera y cuerdas de sisal dibujan montañas y dos círculos en una pared blanca, con papeles impresos atados a lo largo de las líneas', en: 'Wooden rods and sisal ropes draw mountains and two circles on a white wall, with printed papers tied along the lines' } },
-      { img: 'site/exercicio_etiquetas', alt: { pt: 'Detalhe dos papéis presos aos nós da corda de sisal, com fragmentos das fotocolagens e exercícios como “Para olvidar un abrazo”', es: 'Detalle de los papeles atados a los nudos de la cuerda de sisal, con fragmentos de los fotocollages y ejercicios como «Para olvidar un abrazo»', en: 'Detail of the papers tied to the knots of the sisal rope, with fragments of the photocollages and exercises such as “Para olvidar un abrazo”' } },
+      { img: 'site/esquecimento-1', alt: { pt: 'Varas de madeira e cordas de sisal desenham montanhas e círculos numa parede branca, com papéis impressos presos ao longo das linhas', es: 'Varillas de madera y cuerdas de sisal dibujan montañas y círculos en una pared blanca, con papeles impresos atados a lo largo de las líneas', en: 'Wooden rods and sisal ropes draw mountains and circles on a white wall, with printed papers tied along the lines' } },
+      { img: 'site/esquecimento-2', alt: { pt: 'A artista de pé diante da parede, olhando a instalação', es: 'La artista de pie frente a la pared, mirando la instalación', en: 'The artist standing before the wall, looking at the installation' } },
+      { img: 'site/esquecimento-3', alt: { pt: 'Detalhe dos papéis presos aos nós da corda de sisal, com fragmentos das fotocolagens e exercícios como “Para olvidar un abrazo”', es: 'Detalle de los papeles atados a los nudos de la cuerda de sisal, con fragmentos de los fotocollages y ejercicios como «Para olvidar un abrazo»', en: 'Detail of the papers tied to the knots of the sisal rope, with fragments of the photocollages and exercises such as “Para olvidar un abrazo”' } },
     ],
     link: '#/ciberpoesia',
     texto: {
@@ -236,9 +241,8 @@ const OBRAS = [
     materiais: { pt: 'fanzines, suporte de madeira e cordas de sisal', es: 'fanzines, soporte de madera y cuerdas de sisal', en: 'fanzines, wooden support and sisal cords' },
     dimensoes: { pt: 'dimensões variáveis', es: 'dimensiones variables', en: 'variable dimensions' },
     fotos: [
-      { img: 'site/zines_parede', alt: { pt: 'Três fileiras de fanzines presas por cordas de sisal', es: 'Tres hileras de fanzines sujetas con cuerdas de sisal', en: 'Three rows of fanzines hanging on sisal cords' } },
-      { img: 'site/zines_folheia', alt: { pt: 'Mão folheando um dos fanzines', es: 'Una mano hojea uno de los fanzines', en: 'A hand leafing through one of the fanzines' } },
-      { img: 'site/fanzine1', alt: { pt: 'Páginas abertas de um fanzine', es: 'Páginas abiertas de un fanzine', en: 'Open pages of a fanzine' } },
+      { img: 'site/zines-1', alt: { pt: 'Três fileiras de fanzines presas por cordas de sisal a suportes de madeira na parede', es: 'Tres hileras de fanzines sujetas con cuerdas de sisal a soportes de madera en la pared', en: 'Three rows of fanzines hanging on sisal cords from wooden brackets on the wall' } },
+      { img: 'site/zines-2', alt: { pt: 'Mão segura um fanzine aberto, com escrita à mão e colagens', es: 'Una mano sostiene un fanzine abierto, con escritura a mano y collages', en: 'A hand holds an open fanzine, with handwriting and collages' } },
     ],
     link: '#/diarios',
     texto: {
@@ -396,6 +400,7 @@ const SOBRE = {
   site: 'https://lonelas.com', // site principal da artista (confirmado)
   artista: {
     nome: 'Lohanna Lonelas',
+    fotoAlt: { pt: 'Lohanna Lonelas, de vestido preto e chapéu, sentada numa cadeira diante das obras penduradas na parede', es: 'Lohanna Lonelas, con vestido negro y sombrero, sentada en una silla frente a las obras colgadas en la pared', en: 'Lohanna Lonelas, in a black dress and hat, sitting on a chair in front of the works hanging on the wall' },
     papel: { pt: 'artista visual, arte-educadora e pesquisadora', es: 'artista visual, arte-educadora e investigadora', en: 'visual artist, art educator and researcher' },
     // bio enviada por Lohanna em 07/11/2026 (pt original; es e en traduzidos)
     bio: {

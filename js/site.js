@@ -913,6 +913,17 @@
     };
   };
 
+  // contorno de papel rasgado nos quatro lados (dentes miúdos sobre uma onda larga), em polygon() de clip-path
+  const rasgoTodo = () => {
+    const r = Math.random, pts = [], n = 22;
+    const lado = (fn) => { let d = 2 + r() * 3; for (let j = 0; j < n; j++) { d = Math.max(0.6, Math.min(7, d + (r() - 0.5) * 3)); fn(j / n * 100, d + (j % 2 ? r() * 2 : 0)); } };
+    lado((q, d) => pts.push(`${q.toFixed(2)}% ${d.toFixed(1)}px`));
+    lado((q, d) => pts.push(`calc(100% - ${d.toFixed(1)}px) ${q.toFixed(2)}%`));
+    lado((q, d) => pts.push(`${(100 - q).toFixed(2)}% calc(100% - ${d.toFixed(1)}px)`));
+    lado((q, d) => pts.push(`${d.toFixed(1)}px ${(100 - q).toFixed(2)}%`));
+    return `polygon(${pts.join(',')})`;
+  };
+
   V.sobre = () => ({
     rotulo: t('sobre'), volta: '#/',
     html: `
@@ -927,6 +938,7 @@
         <p class="rotulo">${t('sobreArtista')}</p>
         <h2 id="h-art" class="titulo">${SOBRE.artista.nome}</h2>
         <p class="cab-sub">${L(SOBRE.artista.papel)}</p>
+        <figure class="sobre-foto" style="--gira:${(Math.random() * 3 - 1.5).toFixed(2)}deg"><div class="sobre-foto-papel" style="${((c) => `-webkit-clip-path:${c};clip-path:${c}`)(rasgoTodo())}"><img src="${src('site/artista')}" alt="${esc(L(SOBRE.artista.fotoAlt))}" width="720" height="900"></div></figure>
         <div class="texto-longo">${L(SOBRE.artista.bio).map((p) => `<p>${esc(p)}</p>`).join('')}
           <p class="indice sobre-sub">${t('sobreObras')}</p>
           ${L(SOBRE.artista.texto).map((p) => `<p>${esc(p)}</p>`).join('')}</div>

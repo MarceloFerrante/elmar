@@ -400,6 +400,7 @@ const SOBRE = {
   site: 'https://lonelas.com', // site principal da artista (confirmado)
   artista: {
     nome: 'Lohanna Lonelas',
+    fotoCredito: 'O. F. Busatto', // nome do arquivo no Drive: "foto artista 01 por O F Busatto"
     fotoAlt: { pt: 'Retrato em preto e branco de Lohanna Lonelas, de chapéu e blusa pretos, diante de peças de tecido penduradas na parede', es: 'Retrato en blanco y negro de Lohanna Lonelas, con sombrero y blusa negros, frente a piezas de tela colgadas en la pared', en: 'Black-and-white portrait of Lohanna Lonelas, in a black hat and top, in front of fabric pieces hanging on the wall' },
     papel: { pt: 'artista visual, arte-educadora e pesquisadora', es: 'artista visual, arte-educadora e investigadora', en: 'visual artist, art educator and researcher' },
     // bio enviada por Lohanna em 07/11/2026 (pt original; es e en traduzidos)

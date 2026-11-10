@@ -696,6 +696,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 .sobre-foto { margin: 18px 0 6px; width: min(78%, 300px); transform: rotate(var(--gira, 0deg)); filter: drop-shadow(0 3px 5px rgba(29, 27, 25, .28)); }
 .sobre-foto-papel { background: #f6f5f1; padding: 7px; }
 .sobre-foto img { display: block; width: 100%; height: auto; }
+.sobre-foto figcaption { margin-top: 9px; font: 400 11px/1.3 var(--sans); letter-spacing: .08em; color: var(--mineral); }
 .sobre-bloco .sobre-sub { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--linha); }
 
 
@@ -1293,6 +1294,7 @@ const SOBRE = {
   site: 'https://lonelas.com', // site principal da artista (confirmado)
   artista: {
     nome: 'Lohanna Lonelas',
+    fotoCredito: 'O. F. Busatto', // nome do arquivo no Drive: "foto artista 01 por O F Busatto"
     fotoAlt: { pt: 'Retrato em preto e branco de Lohanna Lonelas, de chapéu e blusa pretos, diante de peças de tecido penduradas na parede', es: 'Retrato en blanco y negro de Lohanna Lonelas, con sombrero y blusa negros, frente a piezas de tela colgadas en la pared', en: 'Black-and-white portrait of Lohanna Lonelas, in a black hat and top, in front of fabric pieces hanging on the wall' },
     papel: { pt: 'artista visual, arte-educadora e pesquisadora', es: 'artista visual, arte-educadora e investigadora', en: 'visual artist, art educator and researcher' },
     // bio enviada por Lohanna em 07/11/2026 (pt original; es e en traduzidos)
@@ -3679,7 +3681,7 @@ const EXERCICIO_MONTA = (() => {
     return `polygon(${pts.join(',')})`;
   };
 
-  const fotoPapel = (nome, alt, w, h) => { const c = rasgoTodo(); return `<figure class="sobre-foto" style="--gira:${(Math.random() * 3 - 1.5).toFixed(2)}deg"><div class="sobre-foto-papel" style="-webkit-clip-path:${c};clip-path:${c}"><img src="${src(nome)}" alt="${esc(L(alt))}" width="${w}" height="${h}" loading="lazy"></div></figure>`; };
+  const fotoPapel = (nome, alt, w, h, credito) => { const c = rasgoTodo(); return `<figure class="sobre-foto" style="--gira:${(Math.random() * 3 - 1.5).toFixed(2)}deg"><div class="sobre-foto-papel" style="-webkit-clip-path:${c};clip-path:${c}"><img src="${src(nome)}" alt="${esc(L(alt))}" width="${w}" height="${h}" loading="lazy"></div>${credito ? `<figcaption>${{ pt: 'foto', es: 'foto', en: 'photo' }[lingua]}: ${esc(credito)}</figcaption>` : ''}</figure>`; };
   V.sobre = () => ({
     rotulo: t('sobre'), volta: '#/',
     html: `
@@ -3694,7 +3696,7 @@ const EXERCICIO_MONTA = (() => {
         <p class="rotulo">${t('sobreArtista')}</p>
         <h2 id="h-art" class="titulo">${SOBRE.artista.nome}</h2>
         <p class="cab-sub">${L(SOBRE.artista.papel)}</p>
-        ${fotoPapel('site/artista', SOBRE.artista.fotoAlt, 675, 900)}
+        ${fotoPapel('site/artista', SOBRE.artista.fotoAlt, 675, 900, SOBRE.artista.fotoCredito)}
         <div class="texto-longo">${L(SOBRE.artista.bio).map((p) => `<p>${esc(p)}</p>`).join('')}
           <p class="indice sobre-sub">${t('sobreObras')}</p>
           ${L(SOBRE.artista.texto).map((p) => `<p>${esc(p)}</p>`).join('')}</div>

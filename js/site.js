@@ -924,7 +924,7 @@
     return `polygon(${pts.join(',')})`;
   };
 
-  const fotoPapel = (nome, alt, w, h) => { const c = rasgoTodo(); return `<figure class="sobre-foto" style="--gira:${(Math.random() * 3 - 1.5).toFixed(2)}deg"><div class="sobre-foto-papel" style="-webkit-clip-path:${c};clip-path:${c}"><img src="${src(nome)}" alt="${esc(L(alt))}" width="${w}" height="${h}" loading="lazy"></div></figure>`; };
+  const fotoPapel = (nome, alt, w, h, credito) => { const c = rasgoTodo(); return `<figure class="sobre-foto" style="--gira:${(Math.random() * 3 - 1.5).toFixed(2)}deg"><div class="sobre-foto-papel" style="-webkit-clip-path:${c};clip-path:${c}"><img src="${src(nome)}" alt="${esc(L(alt))}" width="${w}" height="${h}" loading="lazy"></div>${credito ? `<figcaption>${{ pt: 'foto', es: 'foto', en: 'photo' }[lingua]}: ${esc(credito)}</figcaption>` : ''}</figure>`; };
   V.sobre = () => ({
     rotulo: t('sobre'), volta: '#/',
     html: `
@@ -939,7 +939,7 @@
         <p class="rotulo">${t('sobreArtista')}</p>
         <h2 id="h-art" class="titulo">${SOBRE.artista.nome}</h2>
         <p class="cab-sub">${L(SOBRE.artista.papel)}</p>
-        ${fotoPapel('site/artista', SOBRE.artista.fotoAlt, 675, 900)}
+        ${fotoPapel('site/artista', SOBRE.artista.fotoAlt, 675, 900, SOBRE.artista.fotoCredito)}
         <div class="texto-longo">${L(SOBRE.artista.bio).map((p) => `<p>${esc(p)}</p>`).join('')}
           <p class="indice sobre-sub">${t('sobreObras')}</p>
           ${L(SOBRE.artista.texto).map((p) => `<p>${esc(p)}</p>`).join('')}</div>

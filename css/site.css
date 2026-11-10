@@ -276,8 +276,9 @@ body[data-vista="inicio"] .topo:not(.rolou) { background: transparent; }
 .contador { position: absolute; right: 0; bottom: calc(-6 * var(--u)); font: 400 calc(10 * var(--u))/1 var(--sans); letter-spacing: .14em; }
 .carrossel.foto { margin: 0 calc(-30 * var(--u)); padding: 0 calc(51 * var(--u)) 0 calc(45 * var(--u)); }
 .foto .car-item { flex: 0 0 100%; margin: 0; scroll-snap-align: center; }
-.car-amplia { display: block; width: 100%; cursor: zoom-in; }
-.foto .car-amplia img { width: 100%; height: calc(372 * var(--u)); max-height: 72vh; object-fit: cover; }
+.car-foto { display: block; width: 100%; }
+/* a foto inteira, sem corte, no máximo do tamanho da área */
+.foto .car-foto img { display: block; width: 100%; height: calc(372 * var(--u)); max-height: 72vh; object-fit: contain; background: var(--papel-2); }
 .foto .car-ant, .foto .car-prox { position: absolute; top: 50%; translate: 0 -50%; }
 .foto .car-ant { left: calc(3 * var(--u)); }
 .foto .car-prox { right: calc(0 * var(--u)); }
@@ -300,7 +301,7 @@ body[data-vista="inicio"] .topo:not(.rolou) { background: transparent; }
 .making { columns: 2; column-gap: 8px; }
 .dedicatoria { margin: 28px 0 8px; text-align: center; font-style: italic; font-size: 15px; color: var(--tinta-2); }
 .dedicatoria::before { content: ''; display: block; width: 32px; height: 1px; background: var(--linha); margin: 0 auto 14px; }
-.proc-img { display: block; width: 100%; margin: 0 0 8px; cursor: zoom-in; break-inside: avoid; background: var(--papel-2); }
+.proc-img { display: block; width: 100%; margin: 0 0 8px; break-inside: avoid; background: var(--papel-2); }
 .proc-img img { display: block; width: 100%; height: auto; }
 .proc-fig { margin: 0 0 8px; break-inside: avoid; }
 .proc-fig .proc-img { margin-bottom: 0; }
@@ -355,7 +356,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 .panorama.arrastando { cursor: grabbing; }
 .panorama.arrastando .pano-img { pointer-events: none; }
 .pano-faixa { display: flex; height: 100%; width: max-content; align-items: stretch; }
-.pano-img { height: 100%; flex: 0 0 auto; overflow: hidden; cursor: zoom-in; display: block; }
+.pano-img { height: 100%; flex: 0 0 auto; overflow: hidden; display: block; }
 .pano-img img { height: 100%; width: auto; max-width: none; object-fit: cover; user-select: none; -webkit-user-drag: none; transition: transform 1.2s var(--ease); animation: pano-entra 1.6s var(--ease) both; }
 .pano-img:hover img { transform: scale(1.035); }
 @keyframes pano-entra { from { transform: scale(1.12); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -437,8 +438,11 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 .retalho {
   --H: calc(var(--hh) * var(--alto)); --W: calc(var(--H) * .3461);
   position: absolute; top: calc((var(--alto) - var(--H)) * var(--yy)); left: calc(var(--pad) + (var(--k) + var(--dx)) * var(--pX));
-  width: var(--W); z-index: 1; will-change: transform; scroll-snap-align: center;
+  width: var(--W); z-index: 1; will-change: transform;
 }
+/* o encaixe da rolagem fica numa âncora invisível no mesmo lugar do papel, sem o transform que o JS escreve a cada quadro:
+   com o encaixe no próprio papel, o ponto de parada mudava junto com o parallax e a faixa voltava/avançava depois de parar */
+.ret-ancora { --H: calc(var(--hh) * var(--alto)); --W: calc(var(--H) * .3461); position: absolute; top: 0; height: 1px; left: calc(var(--pad) + (var(--k) + var(--dx)) * var(--pX)); width: var(--W); scroll-snap-align: center; pointer-events: none; visibility: hidden; }
 .ret-abre { display: block; width: 100%; color: inherit; text-decoration: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
 .ret-frente { display: block; position: relative; }
 .ret-veu { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
@@ -676,16 +680,6 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 .sobre-bloco .sobre-sub { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--linha); }
 
 
-/* ---------- zoom ---------- */
-.zoom { position: fixed; inset: 0; z-index: 100; background: rgba(251, 250, 247, .98); opacity: 0; transition: opacity .3s; }
-.zoom.aberto { opacity: 1; }
-.zoom-fecha { position: absolute; right: var(--gutter); top: 8px; z-index: 2; width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--papel); font-size: 24px; line-height: 1; }
-.zoom-volta { position: absolute; left: var(--gutter); top: 8px; z-index: 2; min-width: 48px; height: 48px; padding: 0; border: 0; background: none; color: var(--tinta); font: 300 26px/1 var(--sans); text-align: left; }
-.zoom-area { position: absolute; inset: 0; display: grid; place-items: center; padding: 64px var(--gutter) 24px; overflow: hidden; cursor: zoom-in; touch-action: none; }
-.zoom-area img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform .45s var(--ease); pointer-events: none; -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
-.zoom-area img.mexendo { transition: none; }
-.zoom.perto .zoom-area { cursor: grab; }
-.zoom.perto .zoom-area:active { cursor: grabbing; }
 
 /* ---------- movimento reduzido ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -697,7 +691,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
 }
 
 @media print {
-  .topo, .menu, .rodape, .zoom { display: none !important; }
+  .topo, .menu, .rodape { display: none !important; }
 }
 
 /* currículo da artista, no Sobre */
@@ -756,7 +750,7 @@ body.tela-cheia { overflow: hidden; height: 100svh; }
   .obra .obra-cab { grid-column: 1 / -1; margin-bottom: 28px; }
   .obra .obra-cab .titulo { font-size: 44px; line-height: 1.1; }
   .obra .carrossel.foto { grid-column: 1; grid-row: 2 / span 3; margin: 0; padding: 0 44px; }
-  .foto .car-amplia img { height: min(78vh, 760px); max-height: none; object-fit: contain; background: var(--papel-2); }
+  .foto .car-foto img { height: min(78vh, 760px); max-height: none; object-fit: contain; background: var(--papel-2); }
   .obra .abas, .obra .painel { grid-column: 2; }
   .obra .abas { grid-row: 2; margin-top: 0; }
   .obra .painel { grid-row: 3; }

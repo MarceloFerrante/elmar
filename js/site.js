@@ -115,110 +115,8 @@
   menu.addEventListener('click', (e) => { if (e.target.closest('a')) abreMenu(false); });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    if (!$('.zoom').hidden) fechaZoom(); else if (!menu.hidden) { abreMenu(false); btnMenu.focus(); }
+    if (!menu.hidden) { abreMenu(false); btnMenu.focus(); }
   });
-
-  // ---------- zoom (ampliar sem cortar) ----------
-  // com zoom > 1: arrastar (1 dedo ou mouse) move a imagem dentro de limites; pinça ajusta o zoom em volta do ponto da pinça;
-  // duplo toque (ou um clique, no mouse) alterna entre inteira e ampliada; roda do mouse aproxima em volta do cursor
-  const zoom = $('.zoom'), zoomImg = $('.zoom img'), zoomArea = $('.zoom-area');
-  let zoomVolta = null, zoomHist = false;
-  const Z = { s: 1, x: 0, y: 0 }, ZMAX = 5, ZDUPLO = 2.5;
-  const zAplica = (anima) => {
-    zoomImg.classList.toggle('mexendo', !anima);
-    zoomImg.style.transform = Z.s === 1 && !Z.x && !Z.y ? '' : `translate(${Z.x}px, ${Z.y}px) scale(${Z.s})`;
-    zoom.classList.toggle('perto', Z.s > 1.001);
-  };
-  // centro da imagem sem transformação, em coordenadas da tela
-  const zCentro = () => { const r = zoomArea.getBoundingClientRect(); return { x: r.left + zoomImg.offsetLeft + zoomImg.offsetWidth / 2, y: r.top + zoomImg.offsetTop + zoomImg.offsetHeight / 2 }; };
-  // limites: maior que a tela, a borda da imagem não entra na tela; menor, fica centrada
-  const zLimita = () => {
-    const c = zCentro(), w = zoomImg.offsetWidth * Z.s, h = zoomImg.offsetHeight * Z.s, VW = zoom.clientWidth, VH = zoom.clientHeight;
-    const eixo = (t, centro, tam, V) => (tam <= V ? V / 2 - centro : Math.min(tam / 2 - centro, Math.max(V - tam / 2 - centro, t)));
-    if (Z.s <= 1) { Z.s = 1; Z.x = 0; Z.y = 0; return; }
-    Z.x = eixo(Z.x, c.x, w, VW); Z.y = eixo(Z.y, c.y, h, VH);
-  };
-  // escala s em volta do ponto P (tela), partindo do estado b, com o ponto P0 de b indo parar em P
-  const zEm = (s, P, b = Z, P0 = P) => {
-    const c = zCentro(); s = Math.max(1, Math.min(ZMAX, s));
-    Z.x = P.x - c.x - (s / b.s) * (P0.x - c.x - b.x); Z.y = P.y - c.y - (s / b.s) * (P0.y - c.y - b.y); Z.s = s;
-  };
-  const zZera = () => { Z.s = 1; Z.x = 0; Z.y = 0; };
-  function abreZoom(nome, alt, origem) {
-    zoomVolta = origem || document.activeElement;
-    zoomImg.src = src(nome); zoomImg.alt = alt || '';
-    zZera(); zAplica(false); zoom.hidden = false;
-    // uma entrada no histórico: o voltar do navegador (ou o gesto do iPhone) fecha a imagem sem sair da página
-    if (!zoomHist) { try { history.pushState({ zoom: 1 }, '', location.href); zoomHist = true; } catch {} }
-    $('.zoom-fecha').setAttribute('aria-label', t('fecharZoom')); $('.zoom-fecha').textContent = '×'; $('.zoom-volta').setAttribute('aria-label', t('voltar'));
-    requestAnimationFrame(() => zoom.classList.add('aberto'));
-    $('.zoom-fecha').focus();
-  }
-  function fechaZoom(peloHistorico) {
-    if (zoom.hidden) return;
-    if (zoomHist && peloHistorico !== true) { zoomHist = false; history.back(); }
-    if (peloHistorico === true) zoomHist = false;
-    dedos.clear(); gesto = null;
-    zoom.classList.remove('aberto'); zoom.hidden = true; zoomImg.removeAttribute('src'); zZera(); zAplica(false);
-    if (zoomVolta) zoomVolta.focus();
-  }
-  // a tela do zoom cobre a seta de voltar do topo: uma seta no mesmo lugar fecha a imagem
-  $('.zoom-fecha').addEventListener('click', () => fechaZoom()); $('.zoom-volta').addEventListener('click', () => fechaZoom());
-  window.addEventListener('popstate', () => { if (!zoom.hidden) fechaZoom(true); else zoomHist = false; });
-  window.addEventListener('hashchange', () => { if (!zoom.hidden) fechaZoom(true); });
-  const dedos = new Map(); let gesto = null, ultimoToque = null;
-  const alterna = (P) => { if (Z.s > 1.001) zZera(); else { zEm(ZDUPLO, P); zLimita(); } zAplica(true); };
-  const comeca = () => {
-    const ps = [...dedos.values()];
-    if (ps.length >= 2) {
-      const [a, b] = ps; gesto = { tipo: 'pinca', base: { ...Z }, d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, m0: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, moveu: true };
-    } else if (ps.length === 1) gesto = { tipo: 'arrasta', base: { ...Z }, p0: { ...ps[0] }, moveu: gesto ? gesto.moveu : false };
-  };
-  zoomArea.addEventListener('pointerdown', (e) => {
-    if (e.button > 0) return;
-    try { zoomArea.setPointerCapture(e.pointerId); } catch {}
-    dedos.set(e.pointerId, { x: e.clientX, y: e.clientY, t: e.pointerType });
-    if (dedos.size === 1) gesto = null;
-    comeca();
-  });
-  zoomArea.addEventListener('pointermove', (e) => {
-    if (!dedos.has(e.pointerId) || !gesto) return;
-    dedos.set(e.pointerId, { x: e.clientX, y: e.clientY, t: e.pointerType });
-    const ps = [...dedos.values()];
-    if (gesto.tipo === 'pinca' && ps.length >= 2) {
-      const [a, b] = ps, d = Math.hypot(a.x - b.x, a.y - b.y), m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-      zEm(gesto.base.s * (d / gesto.d0), m, gesto.base, gesto.m0); zLimita(); zAplica(false);
-    } else if (gesto.tipo === 'arrasta') {
-      const dx = e.clientX - gesto.p0.x, dy = e.clientY - gesto.p0.y;
-      if (Math.hypot(dx, dy) > 6) gesto.moveu = true;
-      if (gesto.moveu && Z.s > 1.001) { Z.x = gesto.base.x + dx; Z.y = gesto.base.y + dy; zLimita(); zAplica(false); }
-    }
-  });
-  const solta = (e) => {
-    if (!dedos.has(e.pointerId)) return;
-    const p = dedos.get(e.pointerId); dedos.delete(e.pointerId);
-    if (dedos.size) { comeca(); gesto.moveu = true; return; } // um dedo saiu da pinça: segue arrastando com o outro
-    const g = gesto; gesto = null;
-    if (e.type === 'pointercancel' || !g || g.moveu) return;
-    const P = { x: e.clientX, y: e.clientY };
-    if (p.t === 'mouse') { alterna(P); return; }
-    // toque: só o duplo toque alterna
-    const agora = Date.now();
-    if (ultimoToque && agora - ultimoToque.t < 320 && Math.hypot(P.x - ultimoToque.x, P.y - ultimoToque.y) < 40) { ultimoToque = null; alterna(P); }
-    else ultimoToque = { t: agora, x: P.x, y: P.y };
-  };
-  zoomArea.addEventListener('pointerup', solta); zoomArea.addEventListener('pointercancel', solta);
-  // pinça do trackpad (chega como roda com ctrl) aproxima; com a imagem ampliada, rolar (dois dedos no trackpad ou a roda) move a imagem
-  zoomArea.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const f = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? zoom.clientHeight : 1;
-    if (!e.ctrlKey && Z.s > 1.001) { Z.x -= e.deltaX * f; Z.y -= e.deltaY * f; }
-    else zEm(Z.s * Math.exp(-e.deltaY * f * (e.ctrlKey ? 0.01 : 0.0022)), { x: e.clientX, y: e.clientY });
-    zLimita(); zAplica(false);
-  }, { passive: false });
-  // no Safari do iPhone, a pinça não pode virar zoom da página
-  ['gesturestart', 'gesturechange'].forEach((n) => zoom.addEventListener(n, (e) => e.preventDefault()));
-  window.addEventListener('resize', () => { if (!zoom.hidden) { zLimita(); zAplica(false); } });
 
   // ---------- vistas ----------
   const V = {};
@@ -399,7 +297,7 @@
         <div class="carrossel foto" aria-roledescription="carrossel" aria-label="${esc(L(o.titulo))}">
           <div class="car-trilho" tabindex="0">${o.fotos.map((f, k) => `
             <figure class="car-item" aria-roledescription="slide" aria-label="${k + 1} / ${nf}">
-              <button type="button" class="car-amplia" data-k="${k}" aria-label="${t('ampliar')}: ${esc(L(f.alt))}"><img src="${src(f.img)}" alt="${esc(L(f.alt))}"></button>
+              <div class="car-foto"><img src="${src(f.img)}" alt="${esc(L(f.alt))}"></div>
             </figure>`).join('')}
           </div>
           ${nf > 1 ? `<button type="button" class="car-ant" aria-label="${t('fotoAnterior')}">←</button><button type="button" class="car-prox" aria-label="${t('fotoProxima')}">→</button>` : ''}
@@ -430,7 +328,6 @@
       montar(raiz) {
         const car = $('.carrossel', raiz), nEl = $('.car-n', raiz);
         ligaCarrossel(car, (j) => { nEl.textContent = j + 1; });
-        ao(car, 'click', (e) => { const b = e.target.closest('.car-amplia'); if (b) { const f = o.fotos[+b.dataset.k]; abreZoom(f.img, L(f.alt), b); } });
         const abas = $$('[role="tab"]', raiz);
         const escolhe = (aba, foco) => abas.forEach((a) => {
           const sim = a === aba; a.setAttribute('aria-selected', sim); a.tabIndex = sim ? 0 : -1;
@@ -459,14 +356,11 @@
           <p class="cab-sub">${t('construcaoTexto')}</p>
         </header>
         <div class="making">${todas.map((f, k) => `
-          ${f.leg ? '<figure class="proc-fig">' : ''}<button type="button" class="proc-img" data-k="${k}" aria-label="${t('ampliar')}: ${esc(L(f.alt))}"><img src="${src(f.img)}" alt="${esc(L(f.alt))}" loading="lazy"></button>${f.leg ? `<figcaption class="proc-leg">${esc(f.leg)}</figcaption></figure>` : ''}`).join('')}
+          ${f.leg ? '<figure class="proc-fig">' : ''}<div class="proc-img"><img src="${src(f.img)}" alt="${esc(L(f.alt))}" loading="lazy"></div>${f.leg ? `<figcaption class="proc-leg">${esc(f.leg)}</figcaption></figure>` : ''}`).join('')}
         </div>
         <p class="dedicatoria">${esc(L(DEDICATORIA))}</p>
         <nav class="obra-nav"><a href="#/exposicao"><span aria-hidden="true">←</span> ${t('exposicao')}</a><a href="#/exposicao/obras">${t('obras')} <span aria-hidden="true">→</span></a></nav>
       </article>`,
-      montar(raiz) {
-        ao(raiz, 'click', (e) => { const b = e.target.closest('.proc-img'); if (b) { const f = todas[+b.dataset.k]; abreZoom(f.img, L(f.alt), b); } });
-      },
     };
   };
 
@@ -517,7 +411,7 @@
       <article class="leitor">
         <h1 class="so-leitor">${t('diarios')} — ${esc(L(d.nome))}</h1>
         <div class="panorama" tabindex="0" aria-label="${t('deslize')}">
-          <div class="pano-faixa">${d.imgs.map((im, i) => `<button type="button" class="pano-img" data-k="${i}" aria-label="${t('ampliar')} ${i + 1} / ${d.imgs.length}"><img src="${src(im)}" alt="${esc(L(d.nome))} ${i + 1}" ${i > 1 ? 'loading="lazy"' : ''} width="2400" height="1697"></button>`).join('')}
+          <div class="pano-faixa">${d.imgs.map((im, i) => `<div class="pano-img"><img src="${src(im)}" alt="${esc(L(d.nome))} ${i + 1}" ${i > 1 ? 'loading="lazy"' : ''} width="2400" height="1697" draggable="false"></div>`).join('')}
             <a class="pano-fim" href="#/diarios/${prox.id}"><i>${t('diarioDe')}</i>${esc(L(prox.nome))} ${seta}</a>
           </div>
         </div>
@@ -554,15 +448,11 @@
         });
         ao($('.pano-ant', raiz), 'click', () => vai(atual() - 1));
         ao($('.pano-prox', raiz), 'click', () => vai(atual() + 1));
-        // arrastar com o mouse; um toque sem arrastar amplia
+        // arrastar com o mouse
         let arr = null;
         ao(pano, 'pointerdown', (e) => { if (e.pointerType === 'mouse') arr = { x: e.clientX, s: pano.scrollLeft, mov: 0 }; });
         ao(window, 'pointermove', (e) => { if (!arr) return; arr.mov = Math.abs(e.clientX - arr.x); pano.scrollLeft = arr.s - (e.clientX - arr.x); if (arr.mov > 4) pano.classList.add('arrastando'); });
         ao(window, 'pointerup', () => { setTimeout(() => { arr = null; pano.classList.remove('arrastando'); }, 0); });
-        ao(pano, 'click', (e) => {
-          const b = e.target.closest('.pano-img'); if (!b || (arr && arr.mov > 4)) return;
-          abreZoom(d.imgs[+b.dataset.k], `${L(d.nome)} ${+b.dataset.k + 1}`, b);
-        });
         pano.focus({ preventScroll: true });
       },
     };
@@ -666,6 +556,7 @@
         ${EXERCICIOS.map((ex, i) => {
           const c = CENA[i];
           return `
+          <i class="ret-ancora" style="--k:${c.k};--dx:${c.dx.toFixed(3)};--hh:${c.hh.toFixed(3)}" aria-hidden="true"></i>
           <div class="retalho" style="--k:${c.k};--dx:${c.dx.toFixed(3)};--hh:${c.hh.toFixed(3)};--yy:${c.yy.toFixed(3)};z-index:${c.k + 1}" data-vel="${c.vel}" data-gx="${c.gx.toFixed(3)}" data-gr="${c.gr.toFixed(4)}" data-i="${i}" data-k="${c.k}">
             <a class="ret-abre" href="#/ciberpoesia/${i + 1}" draggable="false" aria-label="${t('fragmento')} ${dois(i + 1)}: ${esc(L(ex.titulo))}">
               <span class="ret-bal${i % 2 ? ' bal-b' : ''}" style="animation-duration:${(5.2 + ((i * 37) % 29) / 10).toFixed(1)}s;animation-delay:-${((i * 53) % 70) / 10}s"><span class="ret-frente papel-${c.rasgo.papel}" style="${c.rasgo.clip}"><img src="${src(FRAGMENTOS[i])}" alt="" width="280" height="809" loading="lazy" decoding="async">${c.rasgo.svg}<i>${dois(i + 1)}</i></span></span>
@@ -682,6 +573,7 @@
     </article>`,
     montar(raiz) {
       const cena = $('.cena', raiz), rolo = $('.cena-rolo', raiz), trilho = $('.cena-trilho', raiz);
+      const ancoras = $$('.ret-ancora', raiz), ancoraDe = new Map($$('.retalho', raiz).map((r, i) => [r, ancoras[i]]));
       const rets = $$('.retalho', raiz).sort((a, b) => a.dataset.k - b.dataset.k); // na ordem da fila
       const quadrados = $$('.cena-paginas button', raiz), antB = $('.cena-seta.ant', raiz), proxB = $('.cena-seta.prox', raiz);
       // Movimento (física do Oráculo Serpentina), agora na rolagem horizontal da faixa: a cada passo, cada
@@ -700,7 +592,9 @@
       const mede = () => {
         ch = trilho.clientHeight; rw = rolo.clientWidth; sw = rolo.scrollWidth; ultimoX = rolo.scrollLeft;
         est.forEach((s) => {
-          const topo = s.r.offsetTop, alt = s.r.offsetHeight; s.esq = s.r.offsetLeft; s.larg = s.r.offsetWidth;
+          // posição horizontal pela âncora do encaixe (sem transform, em px fracionados): é exatamente onde o navegador encaixa
+          const a = ancoraDe.get(s.r).getBoundingClientRect(), t0 = trilho.getBoundingClientRect().left;
+          const topo = s.r.offsetTop, alt = s.r.offsetHeight; s.esq = a.left - t0; s.larg = a.width;
           s.yMin = Math.min(0, -topo); s.yMax = Math.max(0, ch - topo - alt);
         });
       };
@@ -784,17 +678,35 @@
       // desde que a faixa esteja inteira na tela (antes disso a roda só desce até ela); nas pontas, a página rola normalmente
       // a faixa anda com uma animação própria (posição guardada numa variável, sem ler o layout por quadro);
       // giros seguidos somam: o próximo passo parte do retalho de destino, não de onde a faixa está no meio do caminho
-      let travaRoda = 0, rodaAlvo = -1, rodaX = 0, rodaFim = 0, rodaPedido = 0;
+      // rolagem lateral (trackpad, ou a roda inclinada do mouse): a faixa segue o gesto 1:1, com a inércia que o próprio
+      // gesto traz, sem encaixe no meio do caminho (o encaixe nativo a cada evento fazia a faixa ir e voltar); quando o
+      // gesto acaba, um único assentamento suave leva ao retalho mais perto. Eventos quase verticais no meio de um gesto
+      // lateral contam como parte dele (antes, viravam passos da roda e brigavam com a rolagem nativa).
+      let travaRoda = 0, rodaAlvo = -1, rodaX = 0, rodaFim = 0, rodaPedido = 0, livre = false, livreAte = 0, assenta = 0;
       const centro = (j) => Math.max(0, Math.min(sw - rw, est[j].esq + est[j].larg / 2 - rw / 2));
       const rodaAnda = () => {
         const d = rodaFim - rodaX;
-        if (Math.abs(d) < 0.8) { rolo.scrollLeft = rodaFim; rolo.classList.remove('rodando'); rodaAlvo = -1; rodaPedido = 0; return; }
-        rodaX += d * 0.16; rolo.scrollLeft = rodaX; rodaPedido = requestAnimationFrame(rodaAnda);
+        if (Math.abs(d) < 0.8) { rolo.scrollLeft = rodaFim; rodaX = rodaFim; rodaPedido = 0; if (!livre) { rolo.classList.remove('rodando'); rodaAlvo = -1; } return; }
+        rodaX += d * (livre ? 0.4 : 0.16); rolo.scrollLeft = rodaX; rodaPedido = requestAnimationFrame(rodaAnda);
       };
-      limpezas.push(() => cancelAnimationFrame(rodaPedido));
+      const rodaVai = () => { if (reduz()) { rodaX = rodaFim; rolo.scrollLeft = rodaFim; if (!livre) rolo.classList.remove('rodando'); return; } if (!rodaPedido) rodaPedido = requestAnimationFrame(rodaAnda); };
+      limpezas.push(() => { cancelAnimationFrame(rodaPedido); clearTimeout(assenta); });
       ao(window, 'wheel', (e) => {
-        if (e.ctrlKey || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // trackpad na horizontal: nativo
-        if (document.body.classList.contains('menu-aberto')) return;
+        if (e.ctrlKey || document.body.classList.contains('menu-aberto')) return;
+        const agora = performance.now(), lateral = Math.abs(e.deltaX) >= Math.abs(e.deltaY);
+        if (lateral ? cena.contains(e.target) : agora < livreAte) {
+          e.preventDefault(); livreAte = agora + 220;
+          if (!livre) { livre = true; rodaAlvo = -1; if (!rodaPedido) rodaX = rolo.scrollLeft; rodaFim = rodaX; rolo.classList.add('rodando'); }
+          const f = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? rw : 1;
+          rodaFim = Math.max(0, Math.min(sw - rw, rodaFim + e.deltaX * f)); rodaVai();
+          clearTimeout(assenta);
+          assenta = setTimeout(() => {
+            livre = false; let k = 0, m = Infinity; est.forEach((s, j) => { const d = Math.abs(centro(j) - rodaFim); if (d < m) { m = d; k = j; } });
+            rodaAlvo = k; rodaFim = centro(k); rodaVai();
+          }, 160);
+          return;
+        }
+        if (lateral || livre) return;
         if (!rolo.contains(e.target)) {
           const q = cena.getBoundingClientRect();
           if (q.top < -2 || q.bottom > innerHeight + 2) return;
@@ -803,13 +715,13 @@
         const j = Math.max(0, Math.min(est.length - 1, base + dir));
         if (j === base || Math.abs(centro(j) - centro(base)) < 2) { if (rodaAlvo < 0) return; e.preventDefault(); return; } // na ponta: a página rola
         e.preventDefault();
-        const agora = performance.now(); if (agora < travaRoda) return;
+        if (agora < travaRoda) return;
         travaRoda = agora + 140; rodaAlvo = j; rodaFim = centro(j);
         if (reduz()) { rolo.scrollLeft = rodaFim; rodaAlvo = -1; return; }
         if (!rodaPedido) { rodaX = rolo.scrollLeft; rolo.classList.add('rodando'); rodaPedido = requestAnimationFrame(rodaAnda); }
       }, { passive: false });
       // se a pessoa arrasta ou usa as setas no meio da animação, a roda solta a faixa
-      const soltaRoda = () => { if (rodaPedido) { cancelAnimationFrame(rodaPedido); rodaPedido = 0; rodaAlvo = -1; rolo.classList.remove('rodando'); } };
+      const soltaRoda = () => { clearTimeout(assenta); livre = false; livreAte = 0; if (rodaPedido) cancelAnimationFrame(rodaPedido); rodaPedido = 0; rodaAlvo = -1; rolo.classList.remove('rodando'); };
       ao(rolo, 'pointerdown', soltaRoda); [antB, proxB, ...quadrados].forEach((q) => ao(q, 'click', soltaRoda, true));
       // arrastar com o mouse (no dedo o navegador já rola sozinho)
       let arrasto = null, arrastou = false;
